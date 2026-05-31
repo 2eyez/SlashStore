@@ -1,22 +1,20 @@
 import axios from "axios";
-
 import {
-  loginStart,
-  loginSuccess,
-  loginFailure,
-} from "./userRedux";
+  getProductsStart,
+  getProductsSuccess,
+  getProductsFailure,
+} from "./productRedux";
 
-export const login = async (dispatch, user) => {
-  dispatch(loginStart());
+export const getProducts = async (dispatch) => {
+  dispatch(getProductsStart());
 
   try {
-    const res = await axios.post(
-      "http://localhost:8000/api/v1/auth/login",
-      user
+    const res = await axios.get(
+      "https://fakestoreapi.com/products"
     );
 
-    dispatch(loginSuccess(res.data));
-  } catch (err) {
-    dispatch(loginFailure());
+    dispatch(getProductsSuccess(res.data));
+  } catch (error) {
+    dispatch(getProductsFailure());
   }
 };
