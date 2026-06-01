@@ -10,7 +10,7 @@ const Categories = ({ categories = [] }) => {
       <div className="mb-8">
         <h2 className="text-2xl font-bold">Categories</h2>
         <p className="text-gray-500 mt-1">
-          Find your perfect scent
+          Your all in one store...
         </p>
       </div>
 
