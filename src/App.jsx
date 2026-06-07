@@ -20,6 +20,7 @@ import CategoryPage from "./pages/CategoryPage";
 import ScrollToTop from "./components/ScrollToTop";
 import ForgotPassword from "./pages/ForgotPassword";
 import Checkout from "./pages/Checkout";
+import Payment from "./pages/Payment";
 
 function App() {
   const Layout = () => {
@@ -80,6 +81,10 @@ function App() {
         {
           path: "/checkout",
           element: <Checkout />,
+        },
+        {
+          path: "/payment",
+          element: <Payment />,
         }
       ],
     },

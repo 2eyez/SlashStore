@@ -1,8 +1,12 @@
 import { useCart } from "../context/CartContext";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Checkout = () => {
   const { cart } = useCart();
+  const navigate = useNavigate();
+
+  const safeCart = cart || [];
 
   const [customer, setCustomer] = useState({
     name: "",
@@ -11,24 +15,38 @@ const Checkout = () => {
     address: "",
   });
 
-  const total = cart.reduce(
+  const total = safeCart.reduce(
     (sum, item) => sum + item.price * item.qty,
     0
   );
 
   const handleChange = (e) => {
-    setCustomer({
-      ...customer,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+
+    setCustomer((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   const handleCheckout = () => {
+    console.log("PAY NOW CLICKED");
+
+    const { name, email, phone, address } = customer;
+
+    // ✅ ALERT VALIDATION ADDED
+    if (!name || !email || !phone || !address) {
+      alert("⚠️ Please fill in all shipping details before proceeding to payment.");
+      return;
+    }
+
     console.log({
       customer,
-      cart,
+      cart: safeCart,
       total,
     });
+
+    navigate("/payment");
   };
 
   return (
@@ -90,7 +108,7 @@ const Checkout = () => {
           </h2>
 
           <div className="space-y-4">
-            {cart.map((item, index) => (
+            {safeCart.map((item, index) => (
               <div
                 key={item.id || index}
                 className="flex items-center justify-between border-b pb-3"
@@ -98,7 +116,7 @@ const Checkout = () => {
                 {/* LEFT SIDE */}
                 <div className="flex items-center gap-3">
                   <img
-                    src={item.image} // change if needed: item.img or item.images?.[0]
+                    src={item.image}
                     alt={item.name}
                     className="w-14 h-14 object-cover rounded"
                   />
@@ -115,13 +133,13 @@ const Checkout = () => {
 
                 {/* RIGHT SIDE */}
                 <p className="font-semibold">
-                  ₦
-                  {(item.price * item.qty).toLocaleString()}
+                  ₦{(item.price * item.qty).toLocaleString()}
                 </p>
               </div>
             ))}
           </div>
 
+          {/* TOTAL + BUTTON */}
           <div className="mt-6 border-t pt-4">
             <div className="flex justify-between text-xl font-bold">
               <span>Total</span>
@@ -129,6 +147,7 @@ const Checkout = () => {
             </div>
 
             <button
+              type="button"
               onClick={handleCheckout}
               className="w-full mt-6 bg-green-600 text-white py-3 rounded-lg hover:bg-green-700"
             >
