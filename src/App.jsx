@@ -19,6 +19,7 @@ import ProductDetail from "./pages/ProductDetail";
 import CategoryPage from "./pages/CategoryPage";
 import ScrollToTop from "./components/ScrollToTop";
 import ForgotPassword from "./pages/ForgotPassword";
+import Checkout from "./pages/Checkout";
 
 function App() {
   const Layout = () => {
@@ -76,6 +77,10 @@ function App() {
           path: "/forgot-password",
           element: <ForgotPassword />,
        },
+        {
+          path: "/checkout",
+          element: <Checkout />,
+        }
       ],
     },
   ]);
