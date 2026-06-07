@@ -29,8 +29,6 @@ const Checkout = () => {
       cart,
       total,
     });
-
-    alert("Payment Integration Coming Next");
   };
 
   return (
@@ -92,22 +90,31 @@ const Checkout = () => {
           </h2>
 
           <div className="space-y-4">
-            {cart.map((item) => (
+            {cart.map((item, index) => (
               <div
-                key={item.id}
-                className="flex justify-between border-b pb-2"
+                key={item.id || index}
+                className="flex items-center justify-between border-b pb-3"
               >
-                <div>
-                  <p className="font-medium">
-                    {item.name}
-                  </p>
+                {/* LEFT SIDE */}
+                <div className="flex items-center gap-3">
+                  <img
+                    src={item.image} // change if needed: item.img or item.images?.[0]
+                    alt={item.name}
+                    className="w-14 h-14 object-cover rounded"
+                  />
 
-                  <p className="text-sm text-gray-500">
-                    Qty: {item.qty}
-                  </p>
+                  <div>
+                    <p className="font-medium">
+                      {item.name}
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      Qty: {item.qty}
+                    </p>
+                  </div>
                 </div>
 
-                <p>
+                {/* RIGHT SIDE */}
+                <p className="font-semibold">
                   ₦
                   {(item.price * item.qty).toLocaleString()}
                 </p>
@@ -118,9 +125,7 @@ const Checkout = () => {
           <div className="mt-6 border-t pt-4">
             <div className="flex justify-between text-xl font-bold">
               <span>Total</span>
-              <span>
-                ₦{total.toLocaleString()}
-              </span>
+              <span>₦{total.toLocaleString()}</span>
             </div>
 
             <button
