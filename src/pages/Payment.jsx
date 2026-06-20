@@ -1,6 +1,7 @@
 import { useCart } from "../context/CartContext";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { usePaystackPayment } from "react-paystack";
 
 const Payment = () => {
   const { cart } = useCart();
@@ -13,16 +14,35 @@ const Payment = () => {
     0
   );
 
-  const handlePayment = () => {
-    // This is where real payment integration (Paystack/Stripe) will go later
-    console.log("Payment confirmed:", {
-      cart,
-      total,
-      paymentMethod,
-    });
+  const config = {
+    reference: new Date().getTime().toString(),
+    email: "david@example.com", // demo email
+    amount: total * 100, // Paystack uses kobo
+    publicKey: "pk_test_23c9b58e6809758edc958b28a24a75302ddd4a00",
+  };
 
-    // Redirect to success page
-    navigate("/success");
+  const initializePayment = usePaystackPayment(config);
+
+  const handlePayment = () => {
+    if (paymentMethod === "card") {
+      initializePayment(
+        () => {
+          console.log("Payment successful");
+          navigate("/success");
+        },
+        () => {
+          console.log("Payment closed");
+        }
+      );
+    } else {
+      console.log("Order placed:", {
+        cart,
+        total,
+        paymentMethod,
+      });
+
+      navigate("/success");
+    }
   };
 
   return (
@@ -32,7 +52,6 @@ const Payment = () => {
       </h1>
 
       <div className="grid md:grid-cols-2 gap-10">
-        {/* PAYMENT OPTIONS */}
         <div className="bg-white shadow-lg rounded-lg p-6">
           <h2 className="text-xl font-semibold mb-5">
             Choose Payment Method
@@ -48,7 +67,7 @@ const Payment = () => {
                   setPaymentMethod(e.target.value)
                 }
               />
-              Card Payment
+              Card Payment (Paystack)
             </label>
 
             <label className="flex items-center gap-3">
@@ -62,22 +81,10 @@ const Payment = () => {
               />
               Bank Transfer
             </label>
-
-            <label className="flex items-center gap-3">
-              <input
-                type="radio"
-                value="cash"
-                checked={paymentMethod === "cash"}
-                onChange={(e) =>
-                  setPaymentMethod(e.target.value)
-                }
-              />
-              Cash on Delivery
-            </label>
+            
           </div>
         </div>
 
-        {/* ORDER SUMMARY */}
         <div className="bg-white shadow-lg rounded-lg p-6">
           <h2 className="text-xl font-semibold mb-5">
             Order Summary
@@ -105,8 +112,7 @@ const Payment = () => {
                 </div>
 
                 <p className="font-semibold">
-                  ₦
-                  {(item.price * item.qty).toLocaleString()}
+                  ₦{(item.price * item.qty).toLocaleString()}
                 </p>
               </div>
             ))}
