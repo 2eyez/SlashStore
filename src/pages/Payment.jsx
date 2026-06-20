@@ -34,8 +34,21 @@ const Payment = () => {
           console.log("Payment closed");
         }
       );
-    } else {
+    } 
+    
+    else if (paymentMethod === "transfer") {
       console.log("Order placed:", {
+        cart,
+        total,
+        paymentMethod,
+      });
+
+      navigate("/success");
+    }
+
+    //  Pay on Delivery logic
+    else if (paymentMethod === "pod") {
+      console.log("Pay on Delivery order placed:", {
         cart,
         total,
         paymentMethod,
@@ -81,7 +94,29 @@ const Payment = () => {
               />
               Bank Transfer
             </label>
-            
+
+          </div>
+        </div>
+
+        <div className="bg-white shadow-lg rounded-lg p-6">
+          <h2 className="text-xl font-semibold mb-5">
+            Choose Payment Method
+          </h2>
+
+          <div className="space-y-4">
+            <label className="flex items-center gap-3">
+              {/* card → pod */}
+              <input
+                type="radio"
+                value="pod"
+                checked={paymentMethod === "pod"}
+                onChange={(e) =>
+                  setPaymentMethod(e.target.value)
+                }
+              />
+              Pay on Delivery
+            </label>
+
           </div>
         </div>
 

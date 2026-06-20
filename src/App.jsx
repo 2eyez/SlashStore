@@ -21,6 +21,7 @@ import ScrollToTop from "./components/ScrollToTop";
 import ForgotPassword from "./pages/ForgotPassword";
 import Checkout from "./pages/Checkout";
 import Payment from "./pages/Payment";
+import Success from "./pages/Success";
 
 function App() {
   const Layout = () => {
@@ -85,6 +86,10 @@ function App() {
         {
           path: "/payment",
           element: <Payment />,
+        },
+        {
+          path: "/success",
+          element: <Success />,
         }
       ],
     },
